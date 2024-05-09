@@ -41,6 +41,13 @@ namespace Northwind_Console.Model
 
         }
 
+        public void editProducts(Product Updateproduct){
+
+            Product product = this.Products.Find(Updateproduct.ProductId);
+            product.ProductName = Updateproduct.ProductName;
+            this.SaveChanges();
+        }
+
         
   
       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

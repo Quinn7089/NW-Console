@@ -25,6 +25,7 @@ try
         Console.WriteLine("3) Display Category and related products");
         Console.WriteLine("4) Display all Categories and their related products");
         Console.WriteLine("5) Add Product");
+        Console.WriteLine("6) Edit Product");
         Console.WriteLine("\"q\" to quit");
         choice = Console.ReadLine();
         Console.Clear();
@@ -195,6 +196,22 @@ try
             db.addProducts(ProductAdd);
 
         }
+        else if(choice == "6"){
+           
+           Console.WriteLine("Choose witch product to edit:");
+           var product = GetProduct(db, logger);
+           if(product != null){
+
+            Product updateProduct = InputProduct(db, logger);
+            if (updateProduct != null){
+
+                updateProduct.ProductId = product.ProductId;
+                db.editProducts(updateProduct);
+                 logger.Info($"Product (id: {product.ProductId}) updated");
+            }
+           }
+
+        }
 
     } while (choice.ToLower() != "q");
 }
@@ -204,3 +221,48 @@ catch (Exception ex)
 }
 
 logger.Info("Program ended");
+
+
+static Product GetProduct(NWContext db, Logger logger){
+
+    var product = db.Products.OrderBy(p => p.ProductId);
+    foreach(Product p in product){
+
+        Console.WriteLine($"{p.ProductId}: {p.ProductName}");
+    }
+    if (int.TryParse(Console.ReadLine(), out int ProductId))
+    {
+        Product product1 = db.Products.FirstOrDefault(p => p.ProductId == ProductId);
+        if (product1 != null)
+        {
+            return product1;
+        }
+        logger.Error("Invalid Product Id");
+    }
+   return null;
+}
+
+static Product InputProduct(NWContext db, Logger logger){
+      
+      Product product = new Product();
+      Console.WriteLine("Enter new product name:");
+      product.ProductName = Console.ReadLine();
+       ValidationContext context = new ValidationContext(product, null, null);
+    List<ValidationResult> results = new List<ValidationResult>();
+
+    var isValid = Validator.TryValidateObject(product, context, results, true);
+    if (isValid)
+    {
+        return product;
+    }
+    else
+    {
+        foreach (var result in results)
+        {
+            logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
+        }
+    }
+    return null;
+
+
+}
