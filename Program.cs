@@ -19,10 +19,12 @@ try
     string choice;
     do
     {
+        Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("1) Display Categories");
         Console.WriteLine("2) Add Category");
         Console.WriteLine("3) Display Category and related products");
         Console.WriteLine("4) Display all Categories and their related products");
+        Console.WriteLine("5) Add Product");
         Console.WriteLine("\"q\" to quit");
         choice = Console.ReadLine();
         Console.Clear();
@@ -75,6 +77,12 @@ try
                     logger.Error($"{result.MemberNames.First()} : {result.ErrorMessage}");
                 }
             }
+            if (category != null)
+            {
+
+                db.addCategories(category);
+                logger.Info($"Category added - (Name) {category.CategoryName}");
+            }
         }
         else if (choice == "3")
         {
@@ -109,7 +117,84 @@ try
                 }
             }
         }
-        Console.WriteLine();
+        // Console.WriteLine();
+        else if (choice == "5")
+        {
+            Product product = new Product();
+            Supplier supplier = new Supplier();
+            Category category = new Category();
+            Console.WriteLine("Enter Product Name");
+            string Name = Console.ReadLine();
+
+            var query = db.Suppliers.OrderBy(p => p.SupplierId);
+            Console.WriteLine("Select a Suplier ID");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            foreach (var item in query)
+            {
+
+                Console.WriteLine($"{item.SupplierId}) - {item.CompanyName}");
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+            int id = int.Parse(Console.ReadLine());
+            Console.Clear();
+            logger.Info($"SupplierId {id} selected");
+            supplier.SupplierId = id;
+
+            var query1 = db.Categories.OrderBy(c => c.CategoryId);
+            Console.WriteLine("Select Category ID");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            foreach (var item in query1)
+            {
+
+                Console.WriteLine($"{item.CategoryId} - {item.CategoryName}");
+            }
+            Console.ForegroundColor = ConsoleColor.White;
+            int IDc = int.Parse(Console.ReadLine());
+            Console.Clear();
+            logger.Info($"CategoryId {IDc} selected");
+            category.CategoryId = IDc;
+
+            Console.WriteLine("Enter QTY of Product");
+            string QTY = Console.ReadLine();
+
+            Console.WriteLine("Enter Unit Pirce");
+            string UnitPrice = product.UnitPrice.ToString();
+
+            UnitPrice = Console.ReadLine();
+            var UnitDec = decimal.Parse(UnitPrice);
+
+
+            Console.WriteLine("Enter Units in Stock");
+            string Stock = product.UnitsInStock.ToString();
+            Stock = Console.ReadLine();
+            var convertStock = short.Parse(Stock);
+
+            Console.WriteLine("Enter Units on Order");
+            string Order = product.UnitsOnOrder.ToString();
+            Order = Console.ReadLine();
+            var convertOrder = short.Parse(Order);
+
+            Console.WriteLine("Enter Recored Level");
+            string records = product.ReorderLevel.ToString();
+            records = Console.ReadLine();
+            var convertRecords = short.Parse(records);
+
+            Console.WriteLine("Enter Discontinued Products");
+            Console.WriteLine("(Discontinued = True ) (Not Discontinued = False)");
+            string discontinued = product.Discontinued.ToString();
+            discontinued = Console.ReadLine();
+            var convertDiscontnued = bool.Parse(discontinued);
+            // if(discontinued == "1"){
+            //     convertDiscontnued = false;
+            // }else if(discontinued =="0"){
+            //     convertDiscontnued = true;
+            // }
+
+            var ProductAdd = new Product { ProductName = Name, SupplierId = id, CategoryId = IDc, QuantityPerUnit = QTY, UnitPrice = UnitDec, UnitsInStock = convertStock, UnitsOnOrder = convertOrder, ReorderLevel = convertRecords};
+
+            db.addProducts(ProductAdd);
+
+        }
 
     } while (choice.ToLower() != "q");
 }

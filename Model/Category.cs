@@ -18,4 +18,5 @@ namespace Northwind_Console.Model
 
         public virtual ICollection<Product> Products { get; set; }
     }
+
 }

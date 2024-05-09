@@ -28,6 +28,21 @@ namespace Northwind_Console.Model
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<Territory> Territories { get; set; }
 
+        public void addCategories(Category Categoires){
+
+            this.Categories.Add(Categoires);
+            this.SaveChanges();
+        } 
+
+        public void addProducts(Product Products){
+             
+             this.Products.Add(Products);
+             this.SaveChanges();
+
+        }
+
+        
+  
       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -284,6 +299,7 @@ namespace Northwind_Console.Model
 
             OnModelCreatingPartial(modelBuilder);
         }
+
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

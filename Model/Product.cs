@@ -5,6 +5,8 @@ namespace Northwind_Console.Model
 {
     public partial class Product
     {
+        private string v;
+
         public Product()
         {
             OrderDetails = new HashSet<OrderDetail>();
@@ -25,4 +27,6 @@ namespace Northwind_Console.Model
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
+
+   
 }
