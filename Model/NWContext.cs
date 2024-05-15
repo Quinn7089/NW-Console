@@ -48,6 +48,13 @@ namespace Northwind_Console.Model
             this.SaveChanges();
         }
 
+        public void editCategory(Category UpdatedCategory){
+
+            Category category = this.Categories.Find(UpdatedCategory.CategoryId);
+            category.CategoryName = UpdatedCategory.CategoryName;
+            this.SaveChanges();
+        }
+
         
   
       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
