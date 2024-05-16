@@ -5,6 +5,7 @@ namespace Northwind_Console.Model
 {
     public partial class OrderDetail
     {
+        
         public int OrderDetailsId { get; set; }
         public int OrderId { get; set; }
         public int ProductId { get; set; }

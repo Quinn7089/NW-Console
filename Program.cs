@@ -34,14 +34,14 @@ try
         logger.Info($"Option {choice} selected");
         if (choice == "1")
         {
-            var query = db.Categories.OrderBy(p => p.CategoryName);
+            IEnumerable<Category> categories = db.Categories.OrderBy(p => p.CategoryName);
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{query.Count()} records returned");
+            Console.WriteLine($"{categories.Count()} records returned");
             Console.ForegroundColor = ConsoleColor.Magenta;
-            foreach (var item in query)
+            foreach (Category c in categories)
             {
-                Console.WriteLine($"{item.CategoryName} - {item.Description}");
+                Console.WriteLine($"{c.CategoryName} - {c.Description}");
             }
             Console.ForegroundColor = ConsoleColor.White;
 
@@ -149,17 +149,13 @@ try
             else if (productChoice == "2")
             {
 
-                var query2 = db.Products.OrderBy(p => p.ProductName);
+                var query2 = db.Products.Where(p => p.Discontinued == false).OrderBy(p => p.ProductName);
                 Console.ForegroundColor = ConsoleColor.Green;
-
+                Console.WriteLine($"{query2.Count()} records returned");
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 foreach (var item in query2)
                 {
-                    if (item.Discontinued == false)
-                    {
-                        // Console.WriteLine($"{item.ProductName.Count()} records returned");
                         Console.WriteLine($"{item.ProductName}");
-                    }
                 }
                 Console.ForegroundColor = ConsoleColor.White;
 
@@ -171,16 +167,15 @@ try
             {
 
 
-                var query = db.Products.OrderBy(p => p.ProductName);
+                var query = db.Products.Where(p => p.Discontinued == true).OrderBy(p => p.ProductName);
+                Console.WriteLine($"{query.Count()} records returned");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 foreach (var item in query)
                 {
-                    if (item.Discontinued == true)
-                    {
 
                         Console.WriteLine($"{item.ProductName}");
-                    }
+                    
                 }
                 Console.ForegroundColor = ConsoleColor.White;
 
@@ -201,9 +196,11 @@ try
                 int id = int.Parse(Console.ReadLine());
                 Console.Clear();
                 logger.Info($"ProductId {id} selected");
-                 Product product1 = db.Products.Include("Categories").FirstOrDefault(c => c.ProductId  == id);
-            
-                Console.WriteLine($"{product.ProductId} - {product.ProductName}");
+                Product product1 = db.Products.FirstOrDefault(p => p.ProductId  == id);
+                 Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"{product1.ProductId}) - {product1.ProductName} \nSuplier ID- {product1.SupplierId} \nCategory ID- {product1.CategoryId} \nQTY- {product1.QuantityPerUnit} \nPrice- ${product1.UnitPrice} \nStock- {product1.UnitsInStock} \nOrder- {product1.UnitsOnOrder} \nDiscontinued- {product1.Discontinued}");
+                Console.ForegroundColor = ConsoleColor.White;
+                // var query1 = db.Products.OrderBy(p => p.ProductId == id);
                 // foreach (Product p in product1.Categories)
                 // {
                 //     Console.WriteLine($"\t{p.ProductId} {p.ProductName} {p.SupplierId} {p.CategoryId} {p.QuantityPerUnit} {p.UnitPrice} {p.UnitsInStock} {p.UnitsOnOrder} {p.ReorderLevel} {p.Discontinued}"); 
@@ -325,6 +322,7 @@ try
                 logger.Info($"Category (ID: {category.CategoryId}) updated");
             }
         }
+  
 
     } while (choice.ToLower() != "q");
 }

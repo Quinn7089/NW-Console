@@ -5,11 +5,12 @@ namespace Northwind_Console.Model
 {
     public partial class Product
     {
-        private string v;
 
         public Product()
         {
             OrderDetails = new HashSet<OrderDetail>();
+            // Categories = new HashSet<Category>();
+           
         }
 
         public int ProductId { get; set; }
@@ -26,6 +27,10 @@ namespace Northwind_Console.Model
         public virtual Category Category { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+
+        // public virtual ICollection<Category> Categories { get; set; }
+
+    
     }
 
    

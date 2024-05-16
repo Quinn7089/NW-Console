@@ -55,7 +55,11 @@ namespace Northwind_Console.Model
             this.SaveChanges();
         }
 
-        
+             public void DeleteBlog(Category category)
+    {
+        this.Categories.Remove(category);
+        this.SaveChanges();
+    }
   
       protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
